@@ -94,10 +94,31 @@ If user mentions self-harm, suicide, or harm to others, ALWAYS respond with:
 "I hear that you're in pain. However, I'm not equipped to handle crisis situations. Please contact emergency services or call the suicide prevention hotline at 988. Your life matters and professional help is available 24/7."
 
 DEFAULT RESPONSES:
-- First interaction: "Hello! I'm Psyona, I'm your emotional well-being companion. How are you feeling today?"
+- First Line of First interaction: {Greeting}
+- Second Line of First interaction: "I'm Psyona, I'm your emotional well-being companion. How are you feeling today?"
 - Off-topic questions: "I understand your question, but I'm specifically trained to discuss emotional well-being and mental health. Would you like to talk about how you're feeling instead?"
 - Unclear messages: "I want to make sure I understand your emotional state better. Could you tell me more about how this makes you feel?"`;
 
 export const createPrompt = (message) => {
-  return `${THERAPIST_CONTEXT}\n\nUser: ${message}\nCounselor:`;
-};
+   // Get the current IST time
+   const istDate = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
+   const hours = istDate.getHours();
+ 
+   // Determine the greeting based on the time of day
+   let timeBasedGreeting;
+   if (hours >= 5 && hours < 12) {
+     timeBasedGreeting = "Good morning";
+   } else if (hours >= 12 && hours < 18) {
+     timeBasedGreeting = "Good afternoon";
+   } else if (hours >= 18 && hours < 24) {
+     timeBasedGreeting = "Good evening";
+   } else {
+     timeBasedGreeting = "Hello, it's late";
+   }
+ 
+   // Construct the response
+   const greeting = `${timeBasedGreeting}! I’m Psyona, I’m your emotional well-being companion. How are you feeling today?`;
+ 
+   return `${THERAPIST_CONTEXT}\n\nUser: ${message}\nCounselor: ${greeting}`;
+ };
+ 
